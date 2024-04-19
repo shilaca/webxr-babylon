@@ -1,0 +1,47 @@
+{
+  "name": "webxr-babylon",
+  "version": "0.0.0",
+  "devDependencies": {
+    "@types/eslint": "^8.56.9",
+    "@typescript-eslint/eslint-plugin": "^7.7.0",
+    "@typescript-eslint/parser": "^7.7.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-solid": "^0.13.2",
+    "globals": "^15.0.0",
+    "postcss-sort-media-queries": "^5.2.0",
+    "prettier": "^3.2.5",
+    "rxjs": "^7.8.1",
+    "stylelint": "^16.3.1",
+    "stylelint-config-recess-order": "^5.0.1",
+    "stylelint-config-standard": "^36.0.0",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vite-plugin-solid": "^2.10.2",
+    "vite-tsconfig-paths": "^4.3.2"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "type": "module",
+  "dependencies": {
+    "@babylonjs/core": "^7.2.1",
+    "@babylonjs/gui": "^7.2.1",
+    "@babylonjs/inspector": "^7.2.1",
+    "@babylonjs/loaders": "^7.2.1",
+    "@babylonjs/materials": "^7.2.1",
+    "@babylonjs/post-processes": "^7.2.1",
+    "@babylonjs/procedural-textures": "^7.2.1",
+    "@babylonjs/serializers": "^7.2.1",
+    "@solidjs/router": "^0.13.2",
+    "solid-js": "^1.8.16"
+  }
+}

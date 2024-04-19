@@ -51,9 +51,9 @@ const Basic: Component = () => {
 
     const scene = await createScene(engine, canvas);
 
-    const light = new HemisphericLight("light", new Vector3(1, 1, 0), scene);
+    new HemisphericLight("light", new Vector3(1, 1, 0), scene);
+    CreateSphere("sphere", { diameter: 1 }, scene);
     const gridMat = new GridMaterial("gridMat", scene);
-    const sphere = CreateSphere("sphere", { diameter: 1 }, scene);
     const ground = CreateGround(
       "ground",
       { width: 6, height: 6, subdivisions: 2 },

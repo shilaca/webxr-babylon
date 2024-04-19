@@ -1,9 +1,4 @@
-import {
-  PhysicsImpostor,
-  Scene,
-  WebXRFeatureName,
-  WebXRSessionManager,
-} from "@babylonjs/core";
+import { Scene } from "@babylonjs/core";
 
 // const getFloorMeshes = (scene: Scene) => {
 //   const env = scene.createDefaultEnvironment();

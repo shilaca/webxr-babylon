@@ -1,4 +1,5 @@
 import { Scene } from "@babylonjs/core";
+import "@babylonjs/loaders/glTF";
 
 // const getFloorMeshes = (scene: Scene) => {
 //   const env = scene.createDefaultEnvironment();
@@ -15,7 +16,7 @@ export const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
       // disableDefaultUI: false,
       uiOptions: {
         sessionMode,
-        requiredFeatures: ["unbounded"],
+        // requiredFeatures: ["unbounded"],
       },
     })
     .catch(err => {

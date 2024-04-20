@@ -24,14 +24,13 @@ import {
 } from "solid-js";
 import Soundfont from "soundfont-player";
 import { createScene } from "babylonUtils/createScene";
-import { setupXR } from "babylonUtils/setupXR";
 import commonStyle from "common/style.module.css";
 import AvailableXRFeatureVersions from "components/AvailableXRFeatureVersions";
 import ChangeXRMode from "components/ChangeXRMode";
 import { createPiano } from "pages/piano/createPiano";
 import { setupPianoXR } from "pages/piano/setupXR";
 
-const Basic: Component = () => {
+const Piano: Component = () => {
   let canvas: HTMLCanvasElement | undefined;
 
   const cleanup$ = new Subject<void>();
@@ -63,7 +62,7 @@ const Basic: Component = () => {
     }
   >();
 
-  const _setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
+  const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
     try {
       const { xr, handTracking } = await setupPianoXR(scene, sessionMode);
       setXR(xr);
@@ -103,7 +102,7 @@ const Basic: Component = () => {
       : vr
         ? "immersive-vr"
         : "inline";
-    await _setupXR(scene, sessionMode);
+    await setupXR(scene, sessionMode);
 
     scene.onPointerObservable.add(pointerInfo => {
       const pointerId = (
@@ -165,14 +164,11 @@ const Basic: Component = () => {
   });
 
   handTracking$.pipe(takeUntil(cleanup$)).subscribe(handTracking => {
-    console.log("hand tracking $: ", handTracking);
+    setHands([]);
     if (handTracking) {
       handTracking.onHandAddedObservable.add(hand => {
-        console.log("hand added: ", hand);
         setHands(prev => [...prev, hand]);
       });
-    } else {
-      setHands([]);
     }
   });
 
@@ -241,4 +237,4 @@ const Basic: Component = () => {
     </>
   );
 };
-export default Basic;
+export default Piano;

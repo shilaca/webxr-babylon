@@ -15,6 +15,7 @@ export const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
       // disableDefaultUI: false,
       uiOptions: {
         sessionMode,
+        requiredFeatures: ["unbounded"],
       },
     })
     .catch(err => {

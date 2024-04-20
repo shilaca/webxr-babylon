@@ -1,0 +1,27 @@
+.overlay {
+  position: relative;
+  z-index: var(--overlay-z-index);
+  display: grid;
+  gap: 16px;
+  max-height: calc(100vh - 160px);
+  padding: 80px 16px;
+  overflow: auto;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.button {
+  padding: 16px;
+}
+
+.supported {
+  color: lightseagreen;
+}
+
+.notSupported {
+  color: crimson;
+}

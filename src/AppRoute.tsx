@@ -14,6 +14,10 @@ export const pages = {
     path: "/piano",
     name: "Piano",
   },
+  features: {
+    path: "/check_features",
+    name: "Check Features",
+  },
 } as const;
 
 const routes: RouteDefinition[] = [
@@ -32,6 +36,10 @@ const routes: RouteDefinition[] = [
   {
     path: pages.piano.path,
     component: lazy(() => import("./pages/piano")),
+  },
+  {
+    path: pages.features.path,
+    component: lazy(() => import("./pages/check_features")),
   },
 ];
 

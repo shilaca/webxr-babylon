@@ -9,15 +9,20 @@ export const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
   // const floorMeshes =
   //   sessionMode === "immersive-vr" ? getFloorMeshes(scene) : undefined;
 
-  const xr = await scene.createDefaultXRExperienceAsync({
-    // floorMeshes,
-    // disableDefaultUI: false,
-    uiOptions: {
-      sessionMode,
-    },
-  });
+  const xr = await scene
+    .createDefaultXRExperienceAsync({
+      // floorMeshes,
+      // disableDefaultUI: false,
+      uiOptions: {
+        sessionMode,
+      },
+    })
+    .catch(err => {
+      console.warn("failed to createDefaultXRExperienceAsync: ", err);
+      return null;
+    });
 
-  if (!xr.baseExperience) console.warn("No XR Support");
+  if (!xr?.baseExperience) console.warn("No XR Support");
 
   // const featureManager = xr.baseExperience.featuresManager;
   // featureManager.enableFeature(WebXRFeatureName.TELEPORTATION, "stable", {

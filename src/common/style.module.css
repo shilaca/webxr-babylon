@@ -14,7 +14,10 @@
   z-index: var(--overlay-z-index);
   display: grid;
   gap: 8px;
+  max-width: 60vw;
+  max-height: calc(100vh - 160px);
   padding: 80px 16px;
+  overflow: auto;
   color: white;
 
   & p {

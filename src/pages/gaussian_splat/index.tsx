@@ -9,6 +9,7 @@ import { Component, createSignal, onCleanup, onMount } from "solid-js";
 import { createScene } from "babylonUtils/createScene";
 import { setupXR } from "babylonUtils/setupXR";
 import commonStyle from "common/style.module.css";
+import ChangeXRMode from "components/ChangeXRMode";
 
 const GaussianSplat: Component = () => {
   let canvas: HTMLCanvasElement | undefined;
@@ -24,10 +25,8 @@ const GaussianSplat: Component = () => {
     undefined,
   );
 
-  const [xrMode, setXRMode] = createSignal<
-    "inline" | "immersive-vr" | "immersive-ar"
-  >("inline");
-  const [xr, setXR] = createSignal<WebXRDefaultExperience | undefined>(
+  const [xrMode, setXRMode] = createSignal<XRSessionMode>("inline");
+  const [xr, setXR] = createSignal<WebXRDefaultExperience | null | undefined>(
     undefined,
   );
 
@@ -59,8 +58,12 @@ const GaussianSplat: Component = () => {
         : "inline";
     setXRMode(sessionMode);
 
-    const xr = await setupXR(scene, sessionMode);
-    setXR(xr);
+    try {
+      const xr = await setupXR(scene, sessionMode);
+      setXR(xr);
+    } catch (err) {
+      console.warn(err);
+    }
 
     engine.runRenderLoop(() => {
       scene.render();
@@ -89,28 +92,15 @@ const GaussianSplat: Component = () => {
     setXRMode(xrMode);
   };
 
-  const isSupport = (value: boolean | undefined) =>
-    typeof value === "boolean" ? String(value) : "loading...";
-
   return (
     <>
       <div class={commonStyle.overlay}>
-        <p>Support VR: {isSupport(supportVR())}</p>
-        <p>Support AR: {isSupport(supportAR())}</p>
-        <label>
-          Change XR Mode:
-          <select
-            value={xrMode()}
-            onChange={event => {
-              console.log(event.currentTarget.value);
-              changeXRMode(event.currentTarget.value as XRSessionMode);
-            }}
-          >
-            <option value="inline">inline</option>
-            <option value="immersive-vr">VR</option>
-            <option value="immersive-ar">AR</option>
-          </select>
-        </label>
+        <ChangeXRMode
+          curXRMode={xrMode()}
+          supportAR={supportAR()}
+          supportVR={supportVR()}
+          onChangeXRMode={changeXRMode}
+        />
       </div>
       <canvas class={commonStyle.mainCanvas} ref={canvas}>
         Oops! It looks like your browser doesn't support the canvas element.

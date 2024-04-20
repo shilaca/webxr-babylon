@@ -9,18 +9,12 @@ import {
 } from "@babylonjs/core";
 import { GridMaterial } from "@babylonjs/materials";
 import { Subject, fromEvent, takeUntil } from "rxjs";
-import {
-  Component,
-  For,
-  Show,
-  createSignal,
-  onCleanup,
-  onMount,
-} from "solid-js";
+import { Component, Show, createSignal, onCleanup, onMount } from "solid-js";
 import { createScene } from "babylonUtils/createScene";
 import { setupXR } from "babylonUtils/setupXR";
 import commonStyle from "common/style.module.css";
-import style from "./style.module.css";
+import AvailableXRFeatureVersions from "components/AvailableXRFeatureVersions";
+import ChangeXRMode from "components/ChangeXRMode";
 
 const Basic: Component = () => {
   let canvas: HTMLCanvasElement | undefined;
@@ -36,10 +30,8 @@ const Basic: Component = () => {
     undefined,
   );
 
-  const [xrMode, setXRMode] = createSignal<
-    "inline" | "immersive-vr" | "immersive-ar"
-  >("inline");
-  const [xr, setXR] = createSignal<WebXRDefaultExperience | undefined>(
+  const [xrMode, setXRMode] = createSignal<XRSessionMode>("inline");
+  const [xr, setXR] = createSignal<WebXRDefaultExperience | null | undefined>(
     undefined,
   );
 
@@ -75,13 +67,12 @@ const Basic: Component = () => {
         : "inline";
     setXRMode(sessionMode);
 
-    const xr = await setupXR(scene, sessionMode);
-    setXR(xr);
-
-    const featureManager = xr.baseExperience.featuresManager;
-    const availableFeatures = featureManager.getEnabledFeatures();
-
-    console.log("availableFeatures: ", availableFeatures);
+    try {
+      const xr = await setupXR(scene, sessionMode);
+      setXR(xr);
+    } catch (err) {
+      console.warn(err);
+    }
 
     engine.runRenderLoop(() => {
       scene.render();
@@ -110,30 +101,17 @@ const Basic: Component = () => {
     setXRMode(xrMode);
   };
 
-  const isSupport = (value: boolean | undefined) =>
-    typeof value === "boolean" ? String(value) : "loading...";
-
   return (
     <>
       <div class={commonStyle.overlay}>
-        <p>Support VR: {isSupport(supportVR())}</p>
-        <p>Support AR: {isSupport(supportAR())}</p>
-        <label>
-          Change XR Mode:
-          <select
-            value={xrMode()}
-            onChange={event => {
-              console.log(event.currentTarget.value);
-              changeXRMode(event.currentTarget.value as XRSessionMode);
-            }}
-          >
-            <option value="inline">inline</option>
-            <option value="immersive-vr">VR</option>
-            <option value="immersive-ar">AR</option>
-          </select>
-        </label>
+        <ChangeXRMode
+          curXRMode={xrMode()}
+          supportAR={supportAR()}
+          supportVR={supportVR()}
+          onChangeXRMode={changeXRMode}
+        />
         <Show when={xr()}>
-          <AvailableVersions xr={xr()!} />
+          <AvailableXRFeatureVersions xr={xr()!} />
         </Show>
       </div>
       <canvas class={commonStyle.mainCanvas} ref={canvas}>
@@ -145,19 +123,3 @@ const Basic: Component = () => {
   );
 };
 export default Basic;
-
-const AvailableVersions: Component<{
-  xr: WebXRDefaultExperience;
-}> = props => {
-  const featureManager = props.xr.baseExperience.featuresManager;
-  const availableFeatures = featureManager.getEnabledFeatures();
-
-  return (
-    <div>
-      <p>Available XR Features</p>
-      <ul class={style.list}>
-        <For each={availableFeatures}>{feature => <li>{feature}</li>}</For>
-      </ul>
-    </div>
-  );
-};

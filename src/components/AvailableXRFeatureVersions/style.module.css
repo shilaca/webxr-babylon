@@ -1,0 +1,13 @@
+.list {
+  display: grid;
+  margin: 4px 0;
+}
+
+.active {
+  color: lightseagreen;
+}
+
+.version {
+  font-size: 0.8em;
+  line-height: 1;
+}

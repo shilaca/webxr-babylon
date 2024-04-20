@@ -15,6 +15,7 @@ const commonConfigs = {
       ...globals.browser,
       ...globals.node,
       XRSessionMode: true,
+      XRHand: true,
     },
   },
   plugins: {

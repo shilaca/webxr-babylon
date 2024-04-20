@@ -21,19 +21,13 @@ const Basic: Component = () => {
 
   const cleanup$ = new Subject<void>();
 
-  const [engine, setEngine] = createSignal<Engine | undefined>(undefined);
+  const [engine, setEngine] = createSignal<Engine | undefined>();
 
-  const [supportVR, setSupportVR] = createSignal<boolean | undefined>(
-    undefined,
-  );
-  const [supportAR, setSupportAR] = createSignal<boolean | undefined>(
-    undefined,
-  );
+  const [supportVR, setSupportVR] = createSignal<boolean | undefined>();
+  const [supportAR, setSupportAR] = createSignal<boolean | undefined>();
 
   const [xrMode, setXRMode] = createSignal<XRSessionMode>("inline");
-  const [xr, setXR] = createSignal<WebXRDefaultExperience | null | undefined>(
-    undefined,
-  );
+  const [xr, setXR] = createSignal<WebXRDefaultExperience | null | undefined>();
 
   onMount(async () => {
     if (!canvas) return;

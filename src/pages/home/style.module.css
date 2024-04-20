@@ -1,5 +1,6 @@
 .list {
   display: flex;
+  flex-wrap: wrap;
   gap: 24px;
   padding: 0;
   margin: 40px;
@@ -7,6 +8,7 @@
 }
 
 .item {
+  flex: 1 1;
   background-color: teal;
 }
 

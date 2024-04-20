@@ -10,6 +10,10 @@ export const pages = {
     path: "/gs",
     name: "Gaussian Splat",
   },
+  piano: {
+    path: "/piano",
+    name: "Piano",
+  },
 } as const;
 
 const routes: RouteDefinition[] = [
@@ -24,6 +28,10 @@ const routes: RouteDefinition[] = [
   {
     path: pages.gs.path,
     component: lazy(() => import("./pages/gaussian_splat")),
+  },
+  {
+    path: pages.piano.path,
+    component: lazy(() => import("./pages/piano")),
   },
 ];
 

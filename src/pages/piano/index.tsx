@@ -50,6 +50,7 @@ const Piano: Component = () => {
 
   const [hands, setHands] = createSignal<WebXRHand[]>([]);
 
+  const [audioCtx, setAudioCtx] = createSignal<AudioContext | undefined>();
   const [pianoSound, setPianoSound] = createSignal<
     Soundfont.Player | undefined
   >();
@@ -84,8 +85,10 @@ const Piano: Component = () => {
     new HemisphericLight("light", new Vector3(1, 1, 0), scene);
     createPiano(scene);
 
+    const audioCtx = new AudioContext();
+    setAudioCtx(audioCtx);
     const pianoSound = await Soundfont.instrument(
-      new AudioContext(),
+      audioCtx,
       "acoustic_grand_piano",
     );
     setPianoSound(pianoSound);
@@ -225,6 +228,24 @@ const Piano: Component = () => {
           supportVR={supportVR()}
           onChangeXRMode={changeXRMode}
         />
+        <button
+          class={commonStyle.button}
+          onClick={() => {
+            const ctx = audioCtx();
+            if (!ctx) return;
+            const oscillator = ctx.createOscillator();
+            oscillator.type = "sine";
+            oscillator.frequency.setValueAtTime(440, ctx.currentTime);
+            oscillator.connect(ctx.destination);
+            oscillator.start();
+            window.setTimeout(() => {
+              oscillator.stop();
+              oscillator.disconnect();
+            }, 100);
+          }}
+        >
+          Audio Check
+        </button>
         <Show when={xr()}>
           <AvailableXRFeatureVersions xr={xr()!} />
         </Show>

@@ -12,7 +12,7 @@
 .overlay {
   position: relative;
   z-index: var(--overlay-z-index);
-  display: grid;
+  display: inline-grid;
   gap: 8px;
   max-width: 60vw;
   max-height: calc(100vh - 160px);
@@ -28,4 +28,8 @@
     padding: 8px;
     margin-inline: 8px;
   }
+}
+
+.button {
+  padding: 8px;
 }

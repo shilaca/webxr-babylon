@@ -17,30 +17,30 @@ const CheckFeatures = () => {
               <p>{sessionMode}</p>
               <For
                 each={[
-                  "bounded-floor",
-                  "local",
-                  "local-floor",
-                  "unbounded",
-                  "viewer",
-                  "anchors",
-                  "depth-sensing",
-                  "dom-overlay",
-                  "hand-tracking",
-                  "hit-test",
-                  "image-tracking",
-                  "layers",
-                  "light-estimation",
-                  "mesh-detection",
-                  "plane-detection",
-                  "camera-access",
-                  "space-wrap",
-                  "secondary-views",
+                  ["bounded-floor"],
+                  ["local"],
+                  ["local-floor"],
+                  ["unbounded"],
+                  ["viewer"],
+                  ["anchors"],
+                  ["depth-sensing"],
+                  ["dom-overlay"],
+                  ["hand-tracking"],
+                  ["hit-test"],
+                  ["image-tracking"],
+                  ["layers"],
+                  ["light-estimation"],
+                  ["mesh-detection"],
+                  ["plane-detection"],
+                  ["camera-access"],
+                  ["space-warp"],
+                  ["secondary-views"],
                 ]}
               >
                 {featureName => (
                   <XrFeatureButton
                     disabled={loading()}
-                    featureName={featureName}
+                    featureNames={featureName}
                     sessionMode={sessionMode}
                     onEnd={() => setLoading(false)}
                     onStart={() => setLoading(true)}
@@ -63,7 +63,7 @@ export default CheckFeatures;
 
 const XrFeatureButton: Component<{
   sessionMode: XRSessionMode;
-  featureName: string;
+  featureNames: string[];
   disabled: boolean;
   onStart: () => void;
   onEnd: () => void;
@@ -94,15 +94,15 @@ const XrFeatureButton: Component<{
 
           const session = await navigator.xr
             ?.requestSession(props.sessionMode, {
-              requiredFeatures: [props.featureName],
-              ...(props.featureName === "dom-overlay"
+              requiredFeatures: props.featureNames,
+              ...(props.featureNames.includes("dom-overlay")
                 ? {
                     domOverlay: {
                       root: document.getElementById("overlay")!,
                     },
                   }
                 : {}),
-              ...(props.featureName === "depth-sensing"
+              ...(props.featureNames.includes("depth-sensing")
                 ? {
                     depthSensing: {
                       usagePreference: ["cpu-optimized", "gpu-optimized"],
@@ -110,7 +110,7 @@ const XrFeatureButton: Component<{
                     },
                   }
                 : {}),
-              ...(props.featureName === "image-tracking" && trackingImg()
+              ...(props.featureNames.includes("image-tracking") && trackingImg()
                 ? {
                     trackedImages: [
                       {
@@ -137,7 +137,7 @@ const XrFeatureButton: Component<{
           props.onEnd();
         }}
       >
-        {props.featureName}
+        {props.featureNames.join(", ")}
         <br />
         <Show when={supported() === true}>supported</Show>
         <Show when={supported() === false}>not supported</Show>

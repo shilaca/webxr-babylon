@@ -16,8 +16,7 @@ export const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
       // disableDefaultUI: false,
       uiOptions: {
         sessionMode,
-        // requiredFeatures: ["unbounded"],
-        optionalFeatures: ["unbounded", "hand-tracking"],
+        optionalFeatures: ["unbounded"],
       },
     })
     .catch(err => {
@@ -26,24 +25,6 @@ export const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
     });
 
   if (!xr?.baseExperience) console.warn("No XR Support");
-
-  // const featureManager = xr.baseExperience.featuresManager;
-  // featureManager.enableFeature(WebXRFeatureName.TELEPORTATION, "stable", {
-  //   xrInput: xr.input,
-  //   floorMeshes: env?.ground ? [env.ground] : undefined,
-  // });
-
-  // featureManager.enableFeature(WebXRFeatureName.HAND_TRACKING, "latest", {
-  //   xrInput: xr.input,
-  //   jointMeshes: {
-  //     enablePhysics: true,
-  //     physicsProps: {
-  //       impostorType: PhysicsImpostor.SphereImpostor,
-  //       friction: 0.5,
-  //       restitution: 0.3,
-  //     },
-  //   },
-  // });
 
   return xr;
 };

@@ -17,6 +17,7 @@ export const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
       uiOptions: {
         sessionMode,
         // requiredFeatures: ["unbounded"],
+        optionalFeatures: ["unbounded", "hand-tracking"],
       },
     })
     .catch(err => {

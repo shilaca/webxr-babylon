@@ -17,8 +17,12 @@ const CheckFeatures = () => {
               <p>{sessionMode}</p>
               <For
                 each={[
-                  "anchors",
                   "bounded-floor",
+                  "local",
+                  "local-floor",
+                  "unbounded",
+                  "viewer",
+                  "anchors",
                   "depth-sensing",
                   "dom-overlay",
                   "hand-tracking",
@@ -26,11 +30,11 @@ const CheckFeatures = () => {
                   "image-tracking",
                   "layers",
                   "light-estimation",
-                  "local",
-                  "local-floor",
+                  "mesh-detection",
+                  "plane-detection",
+                  "camera-access",
+                  "space-wrap",
                   "secondary-views",
-                  "unbounded",
-                  "viewer",
                 ]}
               >
                 {featureName => (

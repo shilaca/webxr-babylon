@@ -1,5 +1,6 @@
-import { Component, For, Show, createSignal } from "solid-js";
+import { Component, For, Show, createSignal, onMount } from "solid-js";
 import commonStyle from "common/style.module.css";
+import trackingImgUrl from "material/goldfish_256.jpg?url";
 import style from "./style.module.css";
 
 const CheckFeatures = () => {
@@ -9,7 +10,7 @@ const CheckFeatures = () => {
 
   return (
     <>
-      <div class={style.overlay}>
+      <div class={style.overlay} id="overlay">
         <For each={["immersive-vr", "immersive-ar"] as const}>
           {sessionMode => (
             <div class={style.container}>
@@ -22,6 +23,7 @@ const CheckFeatures = () => {
                   "dom-overlay",
                   "hand-tracking",
                   "hit-test",
+                  "image-tracking",
                   "layers",
                   "light-estimation",
                   "local",
@@ -64,6 +66,16 @@ const XrFeatureButton: Component<{
 }> = props => {
   const [supported, setSupported] = createSignal<boolean | undefined>();
 
+  const [trackingImg, setTrackingImg] = createSignal<ImageBitmap | undefined>();
+
+  onMount(async () => {
+    const img = document.createElement("img");
+    img.src = trackingImgUrl;
+    await img.decode();
+    const imgBitmap = await createImageBitmap(img);
+    setTrackingImg(imgBitmap);
+  });
+
   return (
     <>
       <button
@@ -79,6 +91,31 @@ const XrFeatureButton: Component<{
           const session = await navigator.xr
             ?.requestSession(props.sessionMode, {
               requiredFeatures: [props.featureName],
+              ...(props.featureName === "dom-overlay"
+                ? {
+                    domOverlay: {
+                      root: document.getElementById("overlay")!,
+                    },
+                  }
+                : {}),
+              ...(props.featureName === "depth-sensing"
+                ? {
+                    depthSensing: {
+                      usagePreference: ["cpu-optimized", "gpu-optimized"],
+                      dataFormatPreference: ["luminance-alpha", "float32"],
+                    },
+                  }
+                : {}),
+              ...(props.featureName === "image-tracking" && trackingImg()
+                ? {
+                    trackedImages: [
+                      {
+                        image: trackingImg()!,
+                        widthInMeters: 0.1,
+                      },
+                    ],
+                  }
+                : {}),
             })
             .then(session => {
               console.log("requested session: ", session);

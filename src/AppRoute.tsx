@@ -14,6 +14,14 @@ export const pages = {
     path: "/piano",
     name: "Piano",
   },
+  plane_detector: {
+    path: "/plane_detector",
+    name: "Plane Detector",
+  },
+  mesh_detector: {
+    path: "/mesh_detector",
+    name: "Mesh Detector",
+  },
   features: {
     path: "/check_features",
     name: "Check Features",
@@ -36,6 +44,14 @@ const routes: RouteDefinition[] = [
   {
     path: pages.piano.path,
     component: lazy(() => import("./pages/piano")),
+  },
+  {
+    path: pages.plane_detector.path,
+    component: lazy(() => import("./pages/plane_detector")),
+  },
+  {
+    path: pages.mesh_detector.path,
+    component: lazy(() => import("./pages/mesh_detector")),
   },
   {
     path: pages.features.path,

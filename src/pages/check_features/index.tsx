@@ -8,9 +8,20 @@ const CheckFeatures = () => {
 
   const [loading, setLoading] = createSignal(false);
 
+  const [trackingImg, setTrackingImg] = createSignal<ImageBitmap | undefined>();
+
+  onMount(async () => {
+    const img = document.createElement("img");
+    img.src = trackingImgUrl;
+    await img.decode();
+    const imgBitmap = await createImageBitmap(img);
+    setTrackingImg(imgBitmap);
+  });
+
   return (
     <>
       <div class={style.overlay} id="overlay">
+        <h1 class={commonStyle.heading}>Check support features</h1>
         <For each={["immersive-vr", "immersive-ar"] as const}>
           {sessionMode => (
             <div class={style.container}>
@@ -35,6 +46,7 @@ const CheckFeatures = () => {
                   ["camera-access"],
                   ["space-warp"],
                   ["secondary-views"],
+                  //
                 ]}
               >
                 {featureName => (
@@ -42,6 +54,7 @@ const CheckFeatures = () => {
                     disabled={loading()}
                     featureNames={featureName}
                     sessionMode={sessionMode}
+                    trackingImg={trackingImg()}
                     onEnd={() => setLoading(false)}
                     onStart={() => setLoading(true)}
                   />
@@ -65,20 +78,11 @@ const XrFeatureButton: Component<{
   sessionMode: XRSessionMode;
   featureNames: string[];
   disabled: boolean;
+  trackingImg?: ImageBitmap;
   onStart: () => void;
   onEnd: () => void;
 }> = props => {
   const [supported, setSupported] = createSignal<boolean | undefined>();
-
-  const [trackingImg, setTrackingImg] = createSignal<ImageBitmap | undefined>();
-
-  onMount(async () => {
-    const img = document.createElement("img");
-    img.src = trackingImgUrl;
-    await img.decode();
-    const imgBitmap = await createImageBitmap(img);
-    setTrackingImg(imgBitmap);
-  });
 
   return (
     <>
@@ -110,11 +114,12 @@ const XrFeatureButton: Component<{
                     },
                   }
                 : {}),
-              ...(props.featureNames.includes("image-tracking") && trackingImg()
+              ...(props.featureNames.includes("image-tracking") &&
+              props.trackingImg
                 ? {
                     trackedImages: [
                       {
-                        image: trackingImg()!,
+                        image: props.trackingImg,
                         widthInMeters: 0.1,
                       },
                     ],

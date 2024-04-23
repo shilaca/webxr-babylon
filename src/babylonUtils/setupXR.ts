@@ -1,5 +1,4 @@
 import { Scene } from "@babylonjs/core";
-import "@babylonjs/loaders/glTF";
 
 // const getFloorMeshes = (scene: Scene) => {
 //   const env = scene.createDefaultEnvironment();

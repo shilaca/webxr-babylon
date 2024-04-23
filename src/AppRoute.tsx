@@ -22,6 +22,10 @@ export const pages = {
     path: "/mesh_detector",
     name: "Mesh Detector",
   },
+  image_tracking: {
+    path: "/image_tracking",
+    name: "Image Tracking",
+  },
   features: {
     path: "/check_features",
     name: "Check Features",
@@ -52,6 +56,10 @@ const routes: RouteDefinition[] = [
   {
     path: pages.mesh_detector.path,
     component: lazy(() => import("./pages/mesh_detector")),
+  },
+  {
+    path: pages.image_tracking.path,
+    component: lazy(() => import("./pages/image_tracking")),
   },
   {
     path: pages.features.path,

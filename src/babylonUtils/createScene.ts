@@ -1,4 +1,5 @@
 import { ArcRotateCamera, Engine, Scene, Vector3 } from "@babylonjs/core";
+import "@babylonjs/loaders/glTF";
 
 export const createScene = async (
   engine: Engine,

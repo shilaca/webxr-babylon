@@ -10,12 +10,13 @@ import { setupXR } from "babylonUtils/setupXR";
 export const setupMeshDetectorXR = async (
   scene: Scene,
   sessionMode: XRSessionMode,
+  onError?: (error: unknown) => void,
 ): Promise<{
   xr: WebXRDefaultExperience | null | undefined;
   meshDetector: WebXRMeshDetector | undefined;
 }> => {
   try {
-    const xr = await setupXR(scene, sessionMode);
+    const xr = await setupXR(scene, sessionMode, onError);
     if (!xr)
       return {
         xr,

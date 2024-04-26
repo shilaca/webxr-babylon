@@ -9,9 +9,10 @@ import { setupXR } from "babylonUtils/setupXR";
 export const setupPianoXR = async (
   scene: Scene,
   sessionMode: XRSessionMode,
+  onError?: (error: unknown) => void,
 ) => {
   try {
-    const xr = await setupXR(scene, sessionMode);
+    const xr = await setupXR(scene, sessionMode, onError);
     if (!xr)
       return {
         xr,

@@ -26,7 +26,7 @@ import {
 } from "solid-js";
 import { createScene } from "babylonUtils/createScene";
 import commonStyle from "common/style.module.css";
-import ChangeXRMode from "components/ChangeXRMode";
+import BasicOverlayContent from "components/BasicOverlayContent";
 import { setupPlaneDetectorXR } from "./setupXR";
 
 const PlaneDetector: Component = () => {
@@ -41,18 +41,25 @@ const PlaneDetector: Component = () => {
 
   const [xrMode, setXRMode] = createSignal<XRSessionMode>("inline");
   const [xr, setXR] = createSignal<WebXRDefaultExperience | null | undefined>();
+
   const [planeDetector, setPlaneDetector] = createSignal<
     WebXRPlaneDetector | undefined
   >();
-
   const planeDetector$ = from(observable(planeDetector));
   const planeMap = new Map<number, Mesh>();
+
+  const [hasError, setHasError] = createSignal(false);
+  const handleError = (error: unknown) => {
+    console.warn(error);
+    setHasError(true);
+  };
 
   const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
     try {
       const { xr, planeDetector } = await setupPlaneDetectorXR(
         scene,
         sessionMode,
+        handleError,
       );
       setXR(xr);
       setXRMode(sessionMode);
@@ -175,11 +182,13 @@ const PlaneDetector: Component = () => {
   return (
     <>
       <div class={commonStyle.overlay}>
-        <ChangeXRMode
-          curXRMode={xrMode()}
+        <BasicOverlayContent
+          changeXRMode={changeXRMode}
+          hasError={hasError()}
           supportAR={supportAR()}
           supportVR={supportVR()}
-          onChangeXRMode={changeXRMode}
+          title="Plane Detector"
+          xrMode={xrMode()}
         />
       </div>
       <canvas class={commonStyle.mainCanvas} ref={canvas}>

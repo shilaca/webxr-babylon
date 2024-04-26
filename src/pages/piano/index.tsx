@@ -15,7 +15,6 @@ import {
 import { Subject, fromEvent, takeUntil, from } from "rxjs";
 import {
   Component,
-  Show,
   createEffect,
   createSignal,
   observable,
@@ -25,8 +24,7 @@ import {
 import Soundfont from "soundfont-player";
 import { createScene } from "babylonUtils/createScene";
 import commonStyle from "common/style.module.css";
-import AvailableXRFeatureVersions from "components/AvailableXRFeatureVersions";
-import ChangeXRMode from "components/ChangeXRMode";
+import BasicOverlayContent from "components/BasicOverlayContent";
 import { createPiano } from "pages/piano/createPiano";
 import { setupPianoXR } from "pages/piano/setupXR";
 
@@ -42,15 +40,21 @@ const Piano: Component = () => {
 
   const [xrMode, setXRMode] = createSignal<XRSessionMode>("inline");
   const [xr, setXR] = createSignal<WebXRDefaultExperience | null | undefined>();
+
   const [handTracking, setHandTracking] = createSignal<
     WebXRHandTracking | undefined
   >();
-
   const handTracking$ = from(observable(handTracking));
 
   const [hands, setHands] = createSignal<WebXRHand[]>([]);
 
-  const [audioCtx, setAudioCtx] = createSignal<AudioContext | undefined>();
+  const [hasError, setHasError] = createSignal(false);
+  const handleError = (error: unknown) => {
+    console.warn(error);
+    setHasError(true);
+  };
+
+  // const [audioCtx, setAudioCtx] = createSignal<AudioContext | undefined>();
   const [pianoSound, setPianoSound] = createSignal<
     Soundfont.Player | undefined
   >();
@@ -65,7 +69,11 @@ const Piano: Component = () => {
 
   const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
     try {
-      const { xr, handTracking } = await setupPianoXR(scene, sessionMode);
+      const { xr, handTracking } = await setupPianoXR(
+        scene,
+        sessionMode,
+        handleError,
+      );
       setXR(xr);
       setXRMode(sessionMode);
       setHandTracking(handTracking);
@@ -86,7 +94,7 @@ const Piano: Component = () => {
     createPiano(scene);
 
     const audioCtx = new AudioContext();
-    setAudioCtx(audioCtx);
+    // setAudioCtx(audioCtx);
     const pianoSound = await Soundfont.instrument(
       audioCtx,
       "acoustic_grand_piano",
@@ -222,13 +230,16 @@ const Piano: Component = () => {
   return (
     <>
       <div class={commonStyle.overlay}>
-        <ChangeXRMode
-          curXRMode={xrMode()}
+        <BasicOverlayContent
+          changeXRMode={changeXRMode}
+          hasError={hasError()}
           supportAR={supportAR()}
           supportVR={supportVR()}
-          onChangeXRMode={changeXRMode}
+          title="Piano"
+          xrMode={xrMode()}
         />
-        <button
+
+        {/* <button
           class={commonStyle.button}
           onClick={() => {
             const ctx = audioCtx();
@@ -245,10 +256,7 @@ const Piano: Component = () => {
           }}
         >
           Audio Check
-        </button>
-        <Show when={xr()}>
-          <AvailableXRFeatureVersions xr={xr()!} />
-        </Show>
+        </button> */}
       </div>
       <canvas class={commonStyle.mainCanvas} ref={canvas}>
         Oops! It looks like your browser doesn't support the canvas element.

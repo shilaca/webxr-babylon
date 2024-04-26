@@ -24,7 +24,7 @@ import {
 } from "solid-js";
 import { createScene } from "babylonUtils/createScene";
 import commonStyle from "common/style.module.css";
-import ChangeXRMode from "components/ChangeXRMode";
+import BasicOverlayContent from "components/BasicOverlayContent";
 import trackingImgUrl from "material/goldfish_256.jpg?url";
 import { setupImageTrackingXR } from "./setupXR";
 import style from "./style.module.css";
@@ -49,11 +49,18 @@ const ImageTracking: Component = () => {
 
   const [obj, setObj] = createSignal<Mesh | undefined>();
 
+  const [hasError, setHasError] = createSignal(false);
+  const handleError = (error: unknown) => {
+    console.warn(error);
+    setHasError(true);
+  };
+
   const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
     try {
       const { xr, imageTracking } = await setupImageTrackingXR(
         scene,
         sessionMode,
+        handleError,
       );
       setXR(xr);
       setXRMode(sessionMode);
@@ -179,16 +186,24 @@ const ImageTracking: Component = () => {
   return (
     <>
       <div class={commonStyle.overlay}>
-        <h1 class={commonStyle.heading}>Image Tracking</h1>
-        <ChangeXRMode
-          curXRMode={xrMode()}
+        <BasicOverlayContent
+          changeXRMode={changeXRMode}
+          hasError={hasError()}
           supportAR={supportAR()}
           supportVR={supportVR()}
-          onChangeXRMode={changeXRMode}
+          title="Image tracking"
+          xrMode={xrMode()}
         />
+
         <figure class={style.imageContainer}>
           <figcaption>Tracking image</figcaption>
-          <img alt="" height={500} src={trackingImgUrl} width={500} />
+          <img
+            alt=""
+            class={style.image}
+            height={500}
+            src={trackingImgUrl}
+            width={500}
+          />
         </figure>
       </div>
       <canvas class={commonStyle.mainCanvas} ref={canvas}>

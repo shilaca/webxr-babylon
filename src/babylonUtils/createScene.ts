@@ -18,7 +18,7 @@ export const createScene = async (
     new Vector3(0, 0, 0),
     scene,
   );
-  camera.setTarget(Vector3.Zero());
+  camera.setTarget(new Vector3(0, 1, 2));
   camera.attachControl(canvas, true);
 
   return scene;

@@ -5,7 +5,11 @@ import { Scene } from "@babylonjs/core";
 //   return env?.ground ? [env.ground] : undefined;
 // };
 
-export const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
+export const setupXR = async (
+  scene: Scene,
+  sessionMode: XRSessionMode,
+  onError?: (error: unknown) => void,
+) => {
   // const floorMeshes =
   //   sessionMode === "immersive-vr" ? getFloorMeshes(scene) : undefined;
 
@@ -22,6 +26,7 @@ export const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
           "unbounded",
           "viewer",
         ],
+        onError,
       },
     })
     .catch(err => {

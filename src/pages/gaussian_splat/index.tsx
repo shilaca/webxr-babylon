@@ -1,15 +1,21 @@
 import {
   Engine,
   GaussianSplattingMesh,
+  Scene,
   WebXRDefaultExperience,
   WebXRSessionManager,
 } from "@babylonjs/core";
 import { Subject, fromEvent, takeUntil } from "rxjs";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 import { createScene } from "babylonUtils/createScene";
-import { setupXR } from "babylonUtils/setupXR";
+import { setupXR as _setupXR } from "babylonUtils/setupXR";
 import commonStyle from "common/style.module.css";
-import ChangeXRMode from "components/ChangeXRMode";
+import BasicOverlayContent from "components/BasicOverlayContent";
+// import localGsUrl from "material/gs_momotaro.cleaned.ply?url";
+
+const serverGsUrl =
+  import.meta.env.VITE_STORAGE_URL + "/gs_momotaro.cleaned.ply";
+const gsUrl = serverGsUrl;
 
 const GaussianSplat: Component = () => {
   let canvas: HTMLCanvasElement | undefined;
@@ -24,6 +30,22 @@ const GaussianSplat: Component = () => {
   const [xrMode, setXRMode] = createSignal<XRSessionMode>("inline");
   const [xr, setXR] = createSignal<WebXRDefaultExperience | null | undefined>();
 
+  const [hasError, setHasError] = createSignal(false);
+  const handleError = (error: unknown) => {
+    console.warn(error);
+    setHasError(true);
+  };
+
+  const setupXR = async (scene: Scene, sessionMode: XRSessionMode) => {
+    try {
+      const xr = await _setupXR(scene, sessionMode, handleError);
+      setXR(xr);
+      setXRMode(sessionMode);
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
   onMount(async () => {
     if (!canvas) return;
 
@@ -34,9 +56,11 @@ const GaussianSplat: Component = () => {
 
     const gs = new GaussianSplattingMesh("gs", null, scene);
     await gs
-      .loadFileAsync(import.meta.env.VITE_STORAGE_URL + "/gs_momotaro.ply")
+      .loadFileAsync(gsUrl)
       .then()
       .catch(err => console.warn("failed to load gsPlyUrl: ", err));
+    gs.position.z = 2;
+    gs.position.y = 1.5;
 
     const vr =
       await WebXRSessionManager.IsSessionSupportedAsync("immersive-vr");
@@ -50,14 +74,7 @@ const GaussianSplat: Component = () => {
       : vr
         ? "immersive-vr"
         : "inline";
-    setXRMode(sessionMode);
-
-    try {
-      const xr = await setupXR(scene, sessionMode);
-      setXR(xr);
-    } catch (err) {
-      console.warn(err);
-    }
+    await setupXR(scene, sessionMode);
 
     engine.runRenderLoop(() => {
       scene.render();
@@ -81,19 +98,19 @@ const GaussianSplat: Component = () => {
     const oldXr = xr();
     if (oldXr) oldXr.dispose();
 
-    const newXr = await setupXR(engine()!.scenes[0], xrMode);
-    setXR(newXr);
-    setXRMode(xrMode);
+    await setupXR(engine()!.scenes[0], xrMode);
   };
 
   return (
     <>
       <div class={commonStyle.overlay}>
-        <ChangeXRMode
-          curXRMode={xrMode()}
+        <BasicOverlayContent
+          changeXRMode={changeXRMode}
+          hasError={hasError()}
           supportAR={supportAR()}
           supportVR={supportVR()}
-          onChangeXRMode={changeXRMode}
+          title="Gaussian splat"
+          xrMode={xrMode()}
         />
       </div>
       <canvas class={commonStyle.mainCanvas} ref={canvas}>

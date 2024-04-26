@@ -1,3 +1,7 @@
 .imageContainer {
   margin: 0;
 }
+
+.image {
+  border: 10px solid white;
+}

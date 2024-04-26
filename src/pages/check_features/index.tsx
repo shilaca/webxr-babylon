@@ -20,50 +20,58 @@ const CheckFeatures = () => {
 
   return (
     <>
-      <div class={style.overlay} id="overlay">
-        <h1 class={commonStyle.heading}>Check support features</h1>
+      <section class={style.overlay} id="overlay">
+        <h1 class={commonStyle.heading}>
+          Check the support for WebXR session features
+        </h1>
+        <p class={commonStyle.text}>
+          Pressing the button will launch a session with the corresponding
+          feature enabled and check if any errors occur.
+        </p>
         <For each={["immersive-vr", "immersive-ar"] as const}>
           {sessionMode => (
-            <div class={style.container}>
-              <p>{sessionMode}</p>
-              <For
-                each={[
-                  ["bounded-floor"],
-                  ["local"],
-                  ["local-floor"],
-                  ["unbounded"],
-                  ["viewer"],
-                  ["anchors"],
-                  ["depth-sensing"],
-                  ["dom-overlay"],
-                  ["hand-tracking"],
-                  ["hit-test"],
-                  ["image-tracking"],
-                  ["layers"],
-                  ["light-estimation"],
-                  ["mesh-detection"],
-                  ["plane-detection"],
-                  ["camera-access"],
-                  ["space-warp"],
-                  ["secondary-views"],
-                  //
-                ]}
-              >
-                {featureName => (
-                  <XrFeatureButton
-                    disabled={loading()}
-                    featureNames={featureName}
-                    sessionMode={sessionMode}
-                    trackingImg={trackingImg()}
-                    onEnd={() => setLoading(false)}
-                    onStart={() => setLoading(true)}
-                  />
-                )}
-              </For>
-            </div>
+            <section class={style.container}>
+              <h2 class={commonStyle.heading}>{sessionMode}</h2>
+              <div class={style.buttonsContainer}>
+                <For
+                  each={[
+                    ["bounded-floor"],
+                    ["local"],
+                    ["local-floor"],
+                    ["unbounded"],
+                    ["viewer"],
+                    ["anchors"],
+                    ["depth-sensing"],
+                    ["dom-overlay"],
+                    ["hand-tracking"],
+                    ["hit-test"],
+                    ["image-tracking"],
+                    ["layers"],
+                    ["light-estimation"],
+                    ["mesh-detection"],
+                    ["plane-detection"],
+                    ["camera-access"],
+                    ["space-warp"],
+                    ["secondary-views"],
+                    //
+                  ]}
+                >
+                  {featureName => (
+                    <XrFeatureButton
+                      disabled={loading()}
+                      featureNames={featureName}
+                      sessionMode={sessionMode}
+                      trackingImg={trackingImg()}
+                      onEnd={() => setLoading(false)}
+                      onStart={() => setLoading(true)}
+                    />
+                  )}
+                </For>
+              </div>
+            </section>
           )}
         </For>
-      </div>
+      </section>
       <canvas class={commonStyle.mainCanvas} ref={canvas}>
         Oops! It looks like your browser doesn't support the canvas element.
         Please update your browser or switch to a modern browser that supports

@@ -6,33 +6,35 @@ export const pages = {
     path: "/basic",
     name: "Basic",
   },
-  gs: {
-    path: "/gs",
-    name: "Gaussian Splat",
+  features: {
+    path: "/check_features",
+    name: "Check features",
   },
+
+  hand_tracking: {
+    path: "/hand_tracking",
+    name: "Hand tracking",
+  },
+  plane_detector: {
+    path: "/plane_detector",
+    name: "Plane detector",
+  },
+  mesh_detector: {
+    path: "/mesh_detector",
+    name: "Mesh detector",
+  },
+  image_tracking: {
+    path: "/image_tracking",
+    name: "Image tracking",
+  },
+
   piano: {
     path: "/piano",
     name: "Piano",
   },
-  plane_detector: {
-    path: "/plane_detector",
-    name: "Plane Detector",
-  },
-  mesh_detector: {
-    path: "/mesh_detector",
-    name: "Mesh Detector",
-  },
-  hand_tracking: {
-    path: "/hand_tracking",
-    name: "Hand Tracking",
-  },
-  image_tracking: {
-    path: "/image_tracking",
-    name: "Image Tracking",
-  },
-  features: {
-    path: "/check_features",
-    name: "Check Features",
+  gs: {
+    path: "/gs",
+    name: "Gaussian splat",
   },
 } as const;
 

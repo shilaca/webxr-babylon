@@ -78,7 +78,7 @@ export const createPiano = (scene: Scene) => {
   scaleFromPivot(piano, new Vector3(0, 0, 0), PIANO_SCALE);
 
   piano.position.z += 0.3;
-  // piano.position.y += -0.2;
+  piano.position.y += 0.5;
 };
 
 const createKey = (scene: Scene, parent: TransformNode, props: PianoKey) => {

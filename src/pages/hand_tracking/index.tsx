@@ -243,6 +243,9 @@ const Basic: Component = () => {
           title="Hand tracking"
           xrMode={xrMode()}
         />
+        <p>
+          Enter XR mode, and when you open your left hand there, a cube appears
+        </p>
       </div>
       <canvas class={commonStyle.mainCanvas} ref={canvas}>
         Oops! It looks like your browser doesn't support the canvas element.

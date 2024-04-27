@@ -74,7 +74,7 @@ const Basic: Component = () => {
     const engine = new Engine(canvas, true);
     setEngine(engine);
 
-    const scene = await createScene(engine, canvas);
+    const { scene } = await createScene(engine, canvas);
 
     new HemisphericLight("light", new Vector3(1, 1, 0), scene);
 

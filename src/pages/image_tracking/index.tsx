@@ -76,7 +76,7 @@ const ImageTracking: Component = () => {
     const engine = new Engine(canvas, true);
     setEngine(engine);
 
-    const scene = await createScene(engine, canvas);
+    const { scene } = await createScene(engine, canvas);
     scene.useRightHandedSystem = true;
 
     new HemisphericLight("light", new Vector3(1, 1, 0), scene);

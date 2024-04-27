@@ -2,6 +2,7 @@ import {
   Engine,
   GaussianSplattingMesh,
   Scene,
+  Vector3,
   WebXRDefaultExperience,
   WebXRSessionManager,
 } from "@babylonjs/core";
@@ -52,7 +53,15 @@ const GaussianSplat: Component = () => {
     const engine = new Engine(canvas, true);
     setEngine(engine);
 
-    const scene = await createScene(engine, canvas);
+    const { scene, camera } = await createScene(
+      engine,
+      canvas,
+      (3 * Math.PI) / 2,
+      Math.PI / 2,
+      3,
+      new Vector3(0, 1.5, 2),
+    );
+    camera.setTarget(new Vector3(0, 1.5, 2));
 
     const gs = new GaussianSplattingMesh("gs", null, scene);
     await gs

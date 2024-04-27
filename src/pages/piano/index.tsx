@@ -88,7 +88,15 @@ const Piano: Component = () => {
     const engine = new Engine(canvas, true);
     setEngine(engine);
 
-    const scene = await createScene(engine, canvas);
+    const { scene, camera } = await createScene(
+      engine,
+      canvas,
+      Math.PI / -2,
+      Math.PI / 10,
+      2,
+      new Vector3(0, 0, 0),
+    );
+    camera.setTarget(new Vector3(0, 1.4, 0.3));
 
     new HemisphericLight("light", new Vector3(1, 1, 0), scene);
     createPiano(scene);

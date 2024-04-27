@@ -1,10 +1,20 @@
-import { ArcRotateCamera, Engine, Scene, Vector3 } from "@babylonjs/core";
+import {
+  ArcRotateCamera,
+  Engine,
+  Scene,
+  TargetCamera,
+  Vector3,
+} from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 
 export const createScene = async (
   engine: Engine,
   canvas: HTMLCanvasElement,
-): Promise<Scene> => {
+  cameraAlpha: number = Math.PI / 3,
+  cameraBeta: number = Math.PI / 4,
+  cameraRadius: number = 3,
+  cameraTarget: Vector3 = Vector3.Zero(),
+): Promise<{ scene: Scene; camera: TargetCamera }> => {
   const scene = new Scene(engine);
 
   // const camera = new FreeCamera("camera", new Vector3(0, 5, -10), scene);
@@ -12,14 +22,14 @@ export const createScene = async (
 
   const camera = new ArcRotateCamera(
     "camera",
-    (3 * Math.PI) / 2,
-    Math.PI / 50,
-    2.2,
-    new Vector3(0, 0, 0),
+    cameraAlpha,
+    cameraBeta,
+    cameraRadius,
+    cameraTarget,
     scene,
   );
-  camera.setTarget(new Vector3(0, 1, 2));
+  camera.setTarget(Vector3.Zero());
   camera.attachControl(canvas, true);
 
-  return scene;
+  return { scene, camera };
 };

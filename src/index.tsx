@@ -13,7 +13,7 @@ import "./style.css";
   j.async = true;
   j.src = "https://www.googletagmanager.com/gtm.js?id=" + gtmId;
   f.parentNode?.insertBefore(j, f);
-})(import.meta.env.VITE_GA_ID);
+})(import.meta.env.VITE_GTM_ID);
 
 const rootEl = document.getElementById("root");
 rootEl && render(() => <AppRoute />, rootEl);

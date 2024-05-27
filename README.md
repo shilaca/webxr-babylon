@@ -1,6 +1,6 @@
 Demo: https://webxr-babylon.shilaca.me/
 
-bun v1.0.13
+bun v1.1.10
 
 ```
 $ bun install

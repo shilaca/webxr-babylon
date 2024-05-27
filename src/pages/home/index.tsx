@@ -42,6 +42,11 @@ const Home: Component = () => {
         <h2 class={commonStyle.heading}>Other examples</h2>
         <List items={[pages.piano, pages.gs]} />
       </div>
+
+      <div class={style.listContainer}>
+        <h2 class={commonStyle.heading}>etc.</h2>
+        <List items={[pages.techbookfest16]} />
+      </div>
     </main>
   );
 };

@@ -36,6 +36,11 @@ export const pages = {
     path: "/gs",
     name: "Gaussian splat",
   },
+
+  techbookfest16: {
+    path: "/techbookfest16",
+    name: "TechBookFest16 - Babylon.js Japan booth",
+  },
 } as const;
 
 const routes: RouteDefinition[] = [
@@ -74,6 +79,10 @@ const routes: RouteDefinition[] = [
   {
     path: pages.features.path,
     component: lazy(() => import("./pages/check_features")),
+  },
+  {
+    path: pages.techbookfest16.path,
+    component: lazy(() => import("./pages/techbookfest16")),
   },
 ];
 
